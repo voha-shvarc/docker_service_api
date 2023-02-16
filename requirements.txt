@@ -1,0 +1,5 @@
+flask
+peewee
+docker
+pytest
+swagger-ui-py

@@ -1,0 +1,208 @@
+    openapi: 3.0.1
+    info:
+      title: Scalr task todo api
+      description: 'This small api is used to manage todo tasks'
+      contact:
+        email: a.penchuk@scalr.com
+      version: 1.0.0
+    servers:
+    - url: http://localhost:5000
+    paths:
+      /tasks:
+        get:
+          summary: Get all tasks from database
+          operationId: get_tasks
+          responses:
+            200:
+              description: successful operation
+              content:
+                application/json:
+                  schema:
+                    $ref: '#/components/schemas/TaskListingDocument'
+        post:
+          summary: Create new task object
+          operationId: create_task
+          requestBody:
+            description: Create new task object
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/TaskDocument'
+            required: true
+          responses:
+            201:
+              description: successful operation
+              content:
+                application/json:
+                  schema:
+                    $ref: '#/components/schemas/TaskDocument'
+      /tasks/{id}:
+        parameters:
+        - name: id
+          in: path
+          description: The id of the task to retrieve
+          required: true
+          schema:
+            type: string
+        get:
+          summary: Get task by id
+          operationId: get_tasks
+          responses:
+            200:
+              description: successful operation
+              content:
+                application/json:
+                  schema:
+                    $ref: '#/components/schemas/TaskDocument'
+        patch:
+          summary: Edit task by id
+          operationId: modify_tasks
+          responses:
+            200:
+              description: successful operation
+              content:
+                application/json:
+                  schema:
+                    $ref: '#/components/schemas/TaskDocument'
+        delete:
+          summary: Delete task object
+          operationId: delete_task
+          responses:
+            204:
+              description: successful operation
+      /tasks/{id}/logs:
+       parameters:
+       - name: id
+         in: path
+         description: The task identifier
+         required: true
+         schema:
+           type: string
+       get:
+        summary: Get task logs by id
+        operationId: Get task logs
+        responses:
+            200:
+              description: successful operation
+              content:
+                text/plain:
+                  schema:
+                    type: string
+    components:
+     schemas:
+      TaskResultDocument:
+          description: |-
+            JSON:API Document.
+
+            see: https://jsonapi.org/format/#document-structure
+          properties:
+            data:
+              $ref: '#/components/schemas/TaskResult'
+            included:
+              items:
+                type: object
+              readOnly: true
+              type: array
+            meta:
+              readOnly: true
+              type: object
+          type: object
+      TaskDocument:
+          description: |-
+            JSON:API Document.
+
+            see: https://jsonapi.org/format/#document-structure
+          properties:
+            data:
+              $ref: '#/components/schemas/Task'
+            included:
+              items:
+                type: object
+              readOnly: true
+              type: array
+            meta:
+              readOnly: true
+              type: object
+          type: object
+      TaskListingDocument:
+          description: |-
+            JSON:API Document Listing
+            see: https://jsonapi.org/format/#document-structure
+          properties:
+            data:
+              items:
+                $ref: '#/components/schemas/Task'
+              type: array
+            included:
+              items:
+                type: object
+              readOnly: true
+              type: array
+            links:
+              additionalProperties:
+                type: string
+              readOnly: true
+              type: object
+            meta:
+              readOnly: true
+              type: object
+          type: object
+      Task:
+          description: The Docker task object model
+          properties:
+            id:
+              readOnly: true
+              type: string
+            type:
+              enum:
+              - tasks
+              type: string
+            attributes:
+              properties:
+                title:
+                  description: The name of the task.
+                  type: string
+                  example: 'Task 1'
+                description:
+                  description: The description of the task.
+                  type: string
+                  example: 'Hello world on ubuntu'
+                command:
+                  description: The command to run.
+                  type: string
+                  example: echo Hello World
+                image:
+                  description: The image to run.
+                  type: string
+                  example: ubuntu
+                status:
+                  description: "The task status"
+                  readOnly: true
+                  enum:
+                    - pending
+                    - running
+                    - finished
+                    - failed
+                execution-time:
+                  type: integer
+                  description: "The task execution time"
+                  readOnly: true
+              required:
+                - title
+                - image
+                - command
+            links:
+              properties:
+                self:
+                    description: "The self url link"
+                    type: string
+                    format: url
+                logs:
+                    description: "The self url link"
+                    type: string
+                    format: url
+              type: object
+              readOnly: true
+          required:
+          - type
+          type: object
