@@ -1,4 +1,3 @@
-# Scalr Coding Test
 
 ## Guidelines
 
