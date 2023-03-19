@@ -1,8 +1,3 @@
-
-## Guidelines
-
-Thanks for interviewing with Scalr! We're excited to have you participating in our testing exercise.
-
 ## Timing
 
 We ask to spend not more than 4 hours on the coding task. If you finished earlier - it is great.
